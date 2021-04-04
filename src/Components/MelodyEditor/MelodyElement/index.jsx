@@ -146,6 +146,7 @@ const MelodyElement = forwardRef(({
 
     osc.onended = () => {
       volume.disconnect(audioCtx.destination);
+      audioCtx.close()
       oscillator.current = null;
       setPlaying(false);
       setHighlight(highlighted.current);
