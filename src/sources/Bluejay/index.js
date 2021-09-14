@@ -1,10 +1,12 @@
-import Source, { PLATFORMS } from '../Source.js';
+import {
+  GithubSource, PLATFORMS, 
+} from '../Source';
 import eeprom from './eeprom';
 
-const VERSIONS_REMOTE = 'https://raw.githubusercontent.com/mathiasvr/bluejay-configurator/bluejay/js/bluejay_versions.json';
+const GITHUB_REPO = 'mathiasvr/bluejay';
 const ESCS_REMOTE = 'https://raw.githubusercontent.com/mathiasvr/bluejay-configurator/bluejay/js/bluejay_escs.json';
 
-class BluejaySource extends Source {
+class BluejaySource extends GithubSource {
   buildDisplayName(flash, make) {
     const settings = flash.settings;
     let revision = 'Unsupported/Unrecognized';
@@ -20,13 +22,21 @@ class BluejaySource extends Source {
 
     return `${make} - ${name}, ${revision}${pwm}`;
   }
+
+  getFileName(key) {
+    return `{0}_${key}.hex`;
+  }
+
+  getTagThing() {
+    return 'EFM8';
+  }
 }
 
 const pwmOptions = [24, 48, 96];
 const config = new BluejaySource(
   'Bluejay',
   PLATFORMS.SILABS,
-  VERSIONS_REMOTE,
+  GITHUB_REPO,
   ESCS_REMOTE,
   eeprom,
   pwmOptions

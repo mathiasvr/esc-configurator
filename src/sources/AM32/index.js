@@ -1,10 +1,12 @@
-import Source, { PLATFORMS } from '../Source';
+import {
+  GithubSource, PLATFORMS, 
+} from '../Source';
 import eeprom from './eeprom';
 
-const VERSIONS_REMOTE = 'https://raw.githubusercontent.com/stylesuxx/esc-configurator/master/src/sources/AM32/versions.json';
+const GITHUB_REPO = 'AlkaMotors/AM32-MultiRotor-ESC-firmware';
 const ESCS_REMOTE = 'https://raw.githubusercontent.com/stylesuxx/esc-configurator/master/src/sources/AM32/escs.json';
 
-class AM32Source extends Source {
+class AM32Source extends GithubSource {
   buildDisplayName(flash, make) {
     const settings = flash.settings;
     let revision = 'Unsupported/Unrecognized';
@@ -20,13 +22,21 @@ class AM32Source extends Source {
 
     return `${make} - AM32, ${revision}${bootloader}`;
   }
+
+  getFileName(key) {
+    return `{0}_${key.replace(/^v/, '')}.hex`;
+  }
+
+  getTagThing() {
+    return 'Arm';
+  }
 }
 
 const pwmOptions = [];
 const source = new AM32Source(
   'AM32',
   PLATFORMS.ARM,
-  VERSIONS_REMOTE,
+  GITHUB_REPO,
   ESCS_REMOTE,
   eeprom,
   pwmOptions
