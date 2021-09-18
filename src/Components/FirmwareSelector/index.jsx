@@ -33,6 +33,7 @@ function FirmwareSelector({
   escHint,
   signatureHint,
   selectedMode,
+  showUnstable,
   warning,
   onSubmit,
   onLocalSubmit,
@@ -139,7 +140,9 @@ function FirmwareSelector({
       }
 
       const versionOptions = [];
-      const versionsSelected = versions[selection.firmware][newType];
+      const versionsSelected = versions[selection.firmware][newType]
+        .filter((v) => showUnstable || !v.prerelease);
+
       for (const version in versionsSelected) {
         const current = versionsSelected[version];
         const url = current.url;
@@ -435,6 +438,7 @@ FirmwareSelector.propTypes = {
   onLocalSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   selectedMode: PropTypes.string,
+  showUnstable: PropTypes.bool.isRequired,
   signatureHint: PropTypes.number,
   warning: PropTypes.string,
 };

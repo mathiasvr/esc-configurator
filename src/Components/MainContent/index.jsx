@@ -143,7 +143,7 @@ function MainContent({
               onCancel={onCancelFirmwareSelection}
               onLocalSubmit={onLocalSubmit}
               onSubmit={onFlashUrl}
-              showWarning={esc ? true : false}
+              showUnstable={appSettings.unstableVersions.value}
               signatureHint={esc ? esc.meta.signature : null}
               warning={warning}
             />
@@ -189,6 +189,7 @@ MainContent.defaultProps = {
     directInput: { value: false },
     disableCommon: { value: false },
     enableAdvanced: { value: false },
+    unstableVersions: { value: false },
   },
   changelogEntries: [],
   connected: 0,
@@ -213,6 +214,7 @@ MainContent.propTypes = {
     directInput: PropTypes.shape(),
     disableCommon: PropTypes.shape(),
     enableAdvanced: PropTypes.shape(),
+    unstableVersions: PropTypes.shape(),
   }),
   changelogEntries: PropTypes.arrayOf(PropTypes.shape()),
   configs: PropTypes.shape({
