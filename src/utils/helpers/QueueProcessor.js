@@ -88,9 +88,9 @@ class QueueProcessor {
          */
         if(!this.processing) {
           this.resolveTimeout();
+        } else {
+          this.quit = true;
         }
-
-        this.quit = true;
       }, timeout);
     }
   }

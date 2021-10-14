@@ -790,10 +790,26 @@ class App extends Component {
       }
       this.addLogMessage('mspUid', { id: uidHex });
 
-      let motorData = await this.serial.getMotorData();
-      motorData = motorData.filter((motor) => motor > 0);
+      let motorData = [];
+      try {
+        motorData = await this.serial.getMotorData();
+        motorData = motorData.filter((motor) => motor > 0);
+      } catch (e) {
+        //
+      }
 
-      const features = await this.serial.getFeatures();
+      let features = {};
+      try {
+        features = await this.serial.getFeatures();
+      } catch (e) {  
+        //
+      }
+
+      try {
+        await this.serial.getBatteryState();
+      } catch (e) {
+        this.serial.getBatteryState = null;
+      }
 
       TagManager.dataLayer({
         dataLayer: {
@@ -813,6 +829,7 @@ class App extends Component {
     } catch(e) {
       this.serial.close();
       this.addLogMessage('portUsed');
+      console.debug(e);
     }
 
     this.setActions({ isConnecting: false });
