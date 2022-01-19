@@ -29,11 +29,6 @@ function FirmwareSelector({
   warning,
 }) {
   const { t } = useTranslation('common');
-  const {
-    escs,
-    versions,
-    pwm,
-  } = configs;
 
   const [escLayout, setEscLayout] = useState(null);
   const [mode, setMode] = useState(null);
@@ -58,6 +53,8 @@ function FirmwareSelector({
 
   // Pre select current firmware and ESC layout if valid
   useEffect(async () => {
+    const { escs } = await configs;
+
     const availableFirmware = Object.keys(escs);
     const validSources = getSupportedSources(esc.meta.signature);
     const validFirmware = availableFirmware.filter((name) =>
@@ -81,6 +78,12 @@ function FirmwareSelector({
 
   // Update firmware options when firmware has changed
   useEffect(async () => {
+    const {
+      escs,
+      versions,
+      pwm,
+    } = await configs;
+
     if(selection.firmware) {
       /**
        * Build the actual Option set for the selected firmware
@@ -134,7 +137,7 @@ function FirmwareSelector({
 
       setOptions(currentOptions);
     }
-  }, [selection.firmware]);
+  }, [selection.firmware, validFirmware]);
 
   function clickFile() {
     file.current.click();
@@ -369,9 +372,11 @@ FirmwareSelector.defaultProps = {
 };
 FirmwareSelector.propTypes = {
   configs: PropTypes.shape({
-    escs: PropTypes.shape().isRequired,
-    versions: PropTypes.shape().isRequired,
-    pwm: PropTypes.shape().isRequired,
+    then: {
+      escs: PropTypes.shape().isRequired,
+      versions: PropTypes.shape().isRequired,
+      pwm: PropTypes.shape().isRequired,
+    },
   }).isRequired,
   esc: PropTypes.shape({
     displayName: PropTypes.string,

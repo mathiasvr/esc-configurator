@@ -113,7 +113,7 @@ class App extends Component {
         this.serialApi.addEventListener('connect', this.serialConnectHandler);
         this.serialApi.addEventListener('disconnect', this.serialDisconnectHandler);
 
-        this.setState({ configs: await this.fetchConfigs() });
+        this.setState({ configs: this.fetchConfigs() });
         this.serialConnectHandler();
       } else {
         this.setSerial({ checked: true });
